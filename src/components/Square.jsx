@@ -7,7 +7,7 @@ export const Square = ({turn, updateBoard, index, isSelected}) => {
     }
 
     return (
-        <div onClick={handleClick} className={"cursor-pointer flex justify-center items-center border-2 rounded-xl border-cyan-600 p-2 text-cyan-600 text-4xl" + (isSelected ? " bg-sky-400" : "")}>
+        <div onClick={handleClick} className={"cursor-pointer flex justify-center items-center border-2 rounded-2xl border-cyan-600 p-2 text-cyan-600 text-4xl" + (isSelected ? " bg-sky-400" : "")}>
             {turn}
         </div>
   )

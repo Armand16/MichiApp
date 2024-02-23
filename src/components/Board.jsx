@@ -1,15 +1,16 @@
 import { useState } from "react"
 import { Square } from "./Square"
 import PropTypes from 'prop-types'
+import { TURNS } from "../utils/constants"
+import { checkWinner } from "../utils/logic"
+import { ModalWinner } from "./ModalWinner"
 
 export const Board = ({initialBoard}) => {
   
-    const TURNS = {X: '✖️', O: '⭕'}
-    
     const [turn, setTurn] = useState(TURNS.X)
-    const [board, setBoard] = useState(initialBoard); 
+    const [board, setBoard] = useState(initialBoard)
+    const [winner, setWinner] = useState(null)
   
-
     const updateBoard = (index) => {
         const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
         const newBoard = [...board]
@@ -18,11 +19,23 @@ export const Board = ({initialBoard}) => {
         setBoard(newBoard)
         setTurn(newTurn)
 
+        const newWinner = checkWinner(newBoard)
+
+        if(newWinner) setWinner(newWinner)
+    }
+
+    const resetGame = () => {
+        setTurn(TURNS.X)
+        setBoard(initialBoard)
+        setWinner(null)
     }
 
     return (
-        <>
-            <section className="grid place-content-center [grid-template-columns:repeat(3,6rem)] [grid-template-rows:repeat(3,6rem)] gap-2">
+        <section className="min-h-screen flex flex-col gap-4 justify-center items-center">
+            <h1 className="mb-4 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+                Michi App
+            </h1>
+            <section className="grid place-content-center [grid-template-columns:repeat(3,6rem)] [grid-template-rows:repeat(3,6rem)] gap-1">
                 {
                     board.map((item, index) => (
                         <Square key={index} turn={item} updateBoard={updateBoard} index={index} />
@@ -33,7 +46,8 @@ export const Board = ({initialBoard}) => {
                 <Square turn={TURNS.X} isSelected={turn===TURNS.X}/>
                 <Square turn={TURNS.O} isSelected={turn===TURNS.O}/>
             </div>
-        </>
+            <ModalWinner winner={winner} resetGame={resetGame} />
+        </section>
   )
 }
 
