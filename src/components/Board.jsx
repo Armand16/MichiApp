@@ -2,8 +2,9 @@ import { useState } from "react"
 import { Square } from "./Square"
 import PropTypes from 'prop-types'
 import { TURNS } from "../utils/constants"
-import { checkWinner } from "../utils/logic"
+import { checkEndGame, checkWinner } from "../utils/logic"
 import { ModalWinner } from "./ModalWinner"
+import confetti from "canvas-confetti"
 
 export const Board = ({initialBoard}) => {
   
@@ -21,7 +22,12 @@ export const Board = ({initialBoard}) => {
 
         const newWinner = checkWinner(newBoard)
 
-        if(newWinner) setWinner(newWinner)
+        if(newWinner) {
+            setWinner(newWinner)
+            confetti({particleCount: 100, spread: 70, origin: { y: 0.6 }})
+        }else{
+            if(checkEndGame(newBoard)) setWinner('')
+        }
     }
 
     const resetGame = () => {
@@ -43,8 +49,8 @@ export const Board = ({initialBoard}) => {
                 }
             </section>
             <div className="flex gap-2">
-                <Square turn={TURNS.X} isSelected={turn===TURNS.X}/>
-                <Square turn={TURNS.O} isSelected={turn===TURNS.O}/>
+                <Square turn={TURNS.X} isSelected={turn===TURNS.X} updateBoard={() => {}}/>
+                <Square turn={TURNS.O} isSelected={turn===TURNS.O} updateBoard={() => {}}/>
             </div>
             <ModalWinner winner={winner} resetGame={resetGame} />
         </section>

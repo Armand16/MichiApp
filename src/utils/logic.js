@@ -12,3 +12,7 @@ export const checkWinner = (boardToCheck) => {
     
     return null;
 }
+
+export const checkEndGame = (boardCheck) => {
+    return boardCheck.every((item) => item !== null)
+}
